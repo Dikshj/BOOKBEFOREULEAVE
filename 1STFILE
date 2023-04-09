@@ -1,0 +1,182 @@
+<
+     
+      
+        
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Book Before U Leave</title>
+    <style>
+      /* CSS styles for the page */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+      #header {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+      #main {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        text-align: center;
+      }
+      #tagline {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      #map {
+        height: 400px;
+        margin-bottom: 20px;
+      }
+      #restaurant-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .restaurant-item {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #eee;
+        border: 1px solid #ccc;
+      }
+      .restaurant-name {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .restaurant-description {
+        font-size: 14px;
+        margin-top: 10px;
+      }
+      .restaurant-seats {
+        font-size: 14px;
+        margin-top: 10px;
+        font-style: italic;
+      }
+      #search-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #333;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 20px;
+      }
+      #search-btn:hover {
+        background-color: #666;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <script>
+      function initMap() {
+        // Center the map on the user's current location
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var map = new google.maps.Map(document.getElementById('map'), {
+              center: {lat: lat, lng: lng},
+              zoom: 13
+            });
+            var request = {
+              location: {lat: lat, lng: lng},
+              radius: 5000,
+              type: ['restaurant']
+            };
+            var service = new google.maps.places.PlacesService(map);
+            service.nearbySearch(request, function(results, status) {
+              if (status == google.maps.places.PlacesServiceStatus.OK) {
+                var restaurantList = document.getElementById('restaurant-list');
+                var count = 0;
+                for (var i = 0; i < results.length; i++) {
+                  var restaurant = results[i];
+                  var marker = new google.maps.Marker({
+                    map: map,
+                    position: restaurant.geometry.location
+                  });
+                  var contentString = '<div class="restaurant-name">' + restaurant.name + '</div>' +
+                                      '<div class="restaurant-description">' + restaurant.vicinity + '</div>';
+                  var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                  });
+                  marker.addListener('click', function() {
+                    infow
+                    //time slots
+
+
+
+//node ja to check time stamps
+const moment = require('moment');
+const MongoClient = require('mongodb').MongoClient;
+
+const url = 'mongodb://localhost:27017/mydatabase'; // replace with your MongoDB server URL and database name
+
+// Set the start and end times for the time slot you want to check
+const startTime = moment('2023-04-08 10:30 AM', 'YYYY-MM-DD h:mm A');
+const endTime = moment('2023-04-08 12:00 PM', 'YYYY-MM-DD h:mm A');
+
+// Connect to MongoDB
+MongoClient.connect(url, function(err, client) {
+  if (err) throw err;
+
+  const db = client.db();
+
+  // Query the database for any occupied time slots that overlap with the specified time slot
+  db.collection('bookings').find({
+    startTime: { $lt: endTime.toDate() },
+    endTime: { $gt: startTime.toDate() }
+  }).toArray(function(err, bookings) {
+    if (err) throw err;
+
+    if (bookings.length > 0) {
+      console.log('The specified time slot is not available.');
+    } else {
+      console.log('The specified time slot is available.');
+    }
+
+    client.close(); // Close the connection to MongoDB
+  });
+});
+//for adding the timestamp in mongo db
+const moment = require('moment');
+const MongoClient = require('mongodb').MongoClient;
+
+const url = 'mongodb://localhost:27017/mydatabase'; // replace with your MongoDB server URL and database name
+
+// Set the start and end times for the selected time slot
+const startTime = moment('2023-04-08 10:30 AM', 'YYYY-MM-DD h:mm A');
+const endTime = moment('2023-04-08 12:00 PM', 'YYYY-MM-DD h:mm A');
+
+// Define the new booking document to insert into the database
+const newBooking = {
+  startTime: startTime.toDate(),
+  endTime: endTime.toDate(),
+  price: 100 // replace with the actual price for the booking
+};
+
+// Connect to MongoDB
+MongoClient.connect(url, function(err, client) {
+  if (err) throw err;
+
+  const db = client.db();
+
+  // Insert the new booking document into the database
+  db.collection('bookings').insertOne(newBooking, function(err, result) {
+    if (err) throw err;
+
+    console.log('New booking added successfully.');
+    console.log(result.insertedId); // Output the ID of the newly inserted document
+
+    client.close(); // Close the connection to MongoDB
+  });
+});
+
+                    
